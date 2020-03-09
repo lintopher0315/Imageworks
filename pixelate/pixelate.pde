@@ -1,59 +1,62 @@
-PImage img;
-PImage imgCopy;
+PImage[] imgArray;
 HScrollbar hs;
 
 void setup() {
   size(640, 336);
   
-  img = loadImage("greenpath.jpg");
-  imgCopy = img.copy();
+  imgArray = new PImage[10];
+  imgArray[0] = loadImage("greenpath.jpg");
+  
+  for (int a = 1; a < 10; a++) {
+    imgArray[a] = imgArray[0].copy();
+    for (int y = 0; y < imgArray[a].height; y+=2*a) {
+      for (int x = 0; x < imgArray[a].width; x+=2*a) {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        int num = 0;
+        for (int i = y-a; i < y+a; i++) {
+          for (int j = x-a; j < x+a; j++) {
+            if (i >= 0 && i < imgArray[a].height && j >= 0 && j < imgArray[a].width) {
+              r += red(imgArray[0].get(j, i));
+              g += green(imgArray[0].get(j, i));
+              b += blue(imgArray[0].get(j, i));
+              num++;
+            }
+          }
+        }
+        r /= num;
+        g /= num;
+        b /= num;
+        for (int i = y-a; i < y+a; i++) {
+          for (int j = x-a; j < x+a; j++) {
+            if (i >= 0 && i < imgArray[a].height && j >= 0 && j < imgArray[a].width) {
+              imgArray[a].set(j, i, color(r, g, b));
+            }
+          }
+        }
+        if (x+2*a >= imgArray[a].width) {
+          for (int i = y-a; i < y+a; i++) {
+            for (int j = x; j < imgArray[a].width; j++) {
+              if (i >= 0 && i < imgArray[a].height && j >= 0 && j < imgArray[a].width) {
+                imgArray[a].set(j, i, color(r, g, b));
+              }
+            }
+          }
+        }
+      }
+    }
+    imgArray[a].updatePixels();
+  }
   
   hs = new HScrollbar(0, 8, width, 16, 2);
 }
 
 void draw() {
-  img.loadPixels();
-  imgCopy.loadPixels();
-  imgCopy = img.copy();
-  imgCopy.updatePixels();
-  
   hs.update();
   hs.display();
-
-  int nearest = floor(hs.getPos() / 64);
-  if (nearest > 0) {
-    for (int y = 0; y < imgCopy.height; y+=1) {
-      for (int x = 0; x < imgCopy.width; x+=1) {
-          int r = 0;
-          int g = 0;
-          int b = 0;
-          int num = 0;
-          for (int i = y-nearest; i < y+nearest; i++) {
-            for (int j = x-nearest; j < x+nearest; j++) {
-              if (i >= 0 && i < imgCopy.height && j >= 0 && j < imgCopy.width) {
-                r += red(imgCopy.get(j, i));
-                g += green(imgCopy.get(j, i));
-                b += blue(imgCopy.get(j, i));
-                num++;
-              }
-            }
-          }
-          r /= num;
-          g /= num;
-          b /= num;
-          for (int i = y-nearest; i < y+nearest; i++) {
-            for (int j = x-nearest; j < x+nearest; j++) {
-              if (i >= 0 && i < imgCopy.height && j >= 0 && j < imgCopy.width) {
-                imgCopy.set(j, i, color(r, g, b));
-              }
-            }
-          }
-      }
-    }
-  }
-  imgCopy.updatePixels();
   
-  image(imgCopy, 0, 16);
+  image(imgArray[floor(hs.getPos() / 64)], 0, 16);
 }
 
 class HScrollbar {
