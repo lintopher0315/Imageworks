@@ -6,7 +6,7 @@ void setup() {
   size(640, 336);
   
   img = loadImage("greenpath.jpg");
-  imgCopy = loadImage("greenpath.jpg");
+  imgCopy = img.copy();
   
   hs = new HScrollbar(0, 8, width, 16, 2);
 }
@@ -14,37 +14,41 @@ void setup() {
 void draw() {
   img.loadPixels();
   imgCopy.loadPixels();
-  for (int y = 0; y < img.height; y++) {
-    for (int x = 0; x < img.width; x++) {
-      imgCopy.set(x, y, img.get(x, y)); 
-    }
-  }
+  imgCopy = img.copy();
   imgCopy.updatePixels();
   
   hs.update();
   hs.display();
-  
-  int nearest = 2;
-  for (int y = 0; y < imgCopy.height-1; y+=1) {
-    for (int x = 0; x < imgCopy.width-1; x+=1) {
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        for (int i = y; i < y+2; i++) {
-          for (int j = x; j < x+2; j++) {
-            r += red(imgCopy.get(j, i));
-            g += green(imgCopy.get(j, i));
-            b += blue(imgCopy.get(j, i));
+
+  int nearest = floor(hs.getPos() / 64);
+  if (nearest > 0) {
+    for (int y = 0; y < imgCopy.height; y+=1) {
+      for (int x = 0; x < imgCopy.width; x+=1) {
+          int r = 0;
+          int g = 0;
+          int b = 0;
+          int num = 0;
+          for (int i = y-nearest; i < y+nearest; i++) {
+            for (int j = x-nearest; j < x+nearest; j++) {
+              if (i >= 0 && i < imgCopy.height && j >= 0 && j < imgCopy.width) {
+                r += red(imgCopy.get(j, i));
+                g += green(imgCopy.get(j, i));
+                b += blue(imgCopy.get(j, i));
+                num++;
+              }
+            }
           }
-        }
-        r /= 4;
-        g /= 4;
-        b /= 4;
-        for (int i = y; i < y+2; i++) {
-          for (int j = x; j < x+2; j++) {
-            imgCopy.set(j, i, color(r, g, b));
+          r /= num;
+          g /= num;
+          b /= num;
+          for (int i = y-nearest; i < y+nearest; i++) {
+            for (int j = x-nearest; j < x+nearest; j++) {
+              if (i >= 0 && i < imgCopy.height && j >= 0 && j < imgCopy.width) {
+                imgCopy.set(j, i, color(r, g, b));
+              }
+            }
           }
-        }
+      }
     }
   }
   imgCopy.updatePixels();
