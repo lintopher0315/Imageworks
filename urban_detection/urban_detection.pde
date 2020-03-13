@@ -3,9 +3,10 @@ PImage img;
 void setup() {
   size(940, 665);
   
-  img = loadImage("urban1.png");
+  img = loadImage("urban4.png");
   
-  int length = 20;
+  int length = 5;
+  double maxLength = Math.sqrt(Math.pow(length, 2) * 2);
   
   for (int i = 0; i < img.height; i++) {
     for (int j = 0; j < img.width; j++) {
@@ -16,9 +17,10 @@ void setup() {
       for (int y = i-length; y < i+length; y++) {
         for (int x = j-length; x < j+length; x++) {
            if (y >= 0 && y < img.height && x >= 0 && x < img.width) {
-             avg_r += red(img.get(x, y));
-             avg_g += green(img.get(x, y));
-             avg_b += blue(img.get(x, y));
+             double modDist = (Math.sqrt(Math.pow(Math.abs(y-i), 2) + Math.pow(Math.abs(x-j), 2)) / maxLength) + 0.5;
+             avg_r += red(img.get(x, y)) * modDist;
+             avg_g += green(img.get(x, y)) * modDist;
+             avg_b += blue(img.get(x, y)) * modDist;
              numPixels++;
            }
         }
@@ -43,6 +45,9 @@ void setup() {
         }
       }
       variance /= numPixels;
+      if (variance > 230) {
+        img.set(j, i, color(255, 0, 0)); 
+      }
     }
   }
 }
