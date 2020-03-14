@@ -17,7 +17,7 @@ void setup() {
       for (int y = i-length; y < i+length; y++) {
         for (int x = j-length; x < j+length; x++) {
            if (y >= 0 && y < img.height && x >= 0 && x < img.width) {
-             double modDist = (Math.sqrt(Math.pow(Math.abs(y-i), 2) + Math.pow(Math.abs(x-j), 2)) / maxLength) + 0.5;
+             double modDist = ((maxLength - Math.sqrt(Math.pow(Math.abs(y-i), 2) + Math.pow(Math.abs(x-j), 2))) / maxLength) + 0.5;
              avg_r += red(img.get(x, y)) * modDist;
              avg_g += green(img.get(x, y)) * modDist;
              avg_b += blue(img.get(x, y)) * modDist;
