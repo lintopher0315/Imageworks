@@ -2,11 +2,19 @@ PImage img;
 PImage img_dilate;
 PImage img_erosion;
 PImage img_diff;
+PImage img_orig;
 
 void setup() {
   size(512, 384);
+  //size(1000, 400);
+  //size(770, 433);
+  //size(1024, 683);
   
   img = loadImage("license1.png");
+  img_orig = img.copy();
+  //img = loadImage("license2.jpg");
+  //img = loadImage("license3.jpg");
+  //img = loadImage("license4.jpg");
   img.filter(GRAY);
   
   img_dilate = img.copy();
@@ -67,8 +75,35 @@ void setup() {
       img_diff.set(j, i, img_erosion.get(j, i) - img.get(j, i)); 
     }
   }
+  img_diff.filter(THRESHOLD);
+  for (int i = 0; i < img.height; i++) {
+    for (int j = 0; j < img.width; j++) {
+      if (red(img_diff.get(j, i)) == 255) {
+        boolean surr = true;
+        outer:
+        for (int y = i-1; y <= i+1; y++) {
+          for (int x = j-1; x <= j+1; x++) {
+            if (y >= 0 && y < img.height && x >= 0 && x < img.width && (y != i && x != j) && red(img_diff.get(x, y)) == 255) {
+              surr = false;
+              break outer;
+            }
+          }
+        }
+        if (surr) {
+          img_diff.set(j, i, color(0, 0, 0)); 
+        }
+      }
+    }
+  }
+  for (int i = 0; i < img.height; i++) {
+    for (int j = 0; j < img.width; j++) {
+      if (red(img_diff.get(j, i)) == 255) {
+        img_orig.set(j, i, color(255, 0, 0)); 
+      }
+    }
+  }
 }
 
 void draw() {
-  image(img_diff, 0, 0);
+  image(img_orig, 0, 0);
 }
