@@ -5,22 +5,22 @@ PImage img_diff;
 PImage img_orig;
 
 void setup() {
-  size(512, 384);
+  //size(512, 384);
   //size(1000, 400);
-  //size(770, 433);
+  size(770, 433);
   //size(1024, 683);
   
-  img = loadImage("license1.png");
-  img_orig = img.copy();
+  //img = loadImage("license1.png");
   //img = loadImage("license2.jpg");
-  //img = loadImage("license3.jpg");
+  img = loadImage("license3.jpg");
   //img = loadImage("license4.jpg");
+  img_orig = img.copy();
   img.filter(GRAY);
   
   img_dilate = img.copy();
   img_diff = img.copy();
   
-  int dilation_size = 3;
+  int dilation_size = 6;
   
   for (int i = 0; i < img.height; i++) {
     for (int j = 0; j < img.width; j++) {
