@@ -16,8 +16,8 @@ void setup() {
   
   for (int i = 0; i < img.height; i++) {
     for (int j = 0; j < img.width; j++) {
-      for (int y = i-dilation_size; y < i+dilation_size; y++) {
-        for (int x = j-dilation_size; x < j+dilation_size; x++) {
+      for (int y = i-dilation_size; y <= i+dilation_size; y++) {
+        for (int x = j-dilation_size; x <= j+dilation_size; x++) {
           if (y >= 0 && y < img.height && x >= 0 && x < img.width) {
             if (red(img.get(j, i)) > red(img_dilate.get(x, y))) {
                img_dilate.set(x, y, img.get(j, i));
@@ -35,15 +35,9 @@ void setup() {
     for (int i = 0; i < img.height; i++) {
       for (int j = 0; j < img.width; j++) {
         float min = red(img_erosion.get(j, i));
-        for (int y = i-1; y < i+1; y++) {
-          for (int x = j-1; x < j+1; x++) {
+        for (int y = i-1; y <= i+1; y++) {
+          for (int x = j-1; x <= j+1; x++) {
             if (y >= 0 && y < img.height && x >= 0 && x < img.width) {
-              /*if (red(img_erosion.get(j, i)) > red(temp.get(x, y)) && red(temp.get(x, y)) > red(img.get(j, i))) {
-                 img_erosion.set(j, i, temp.get(x, y));
-              }*/
-              /*if (red(temp.get(j, i)) < red(img_erosion.get(x, y)) && red(temp.get(j, i)) > red(img.get(x, y))) {
-                 img_erosion.set(x, y, temp.get(j, i));
-              }*/
               if (red(temp.get(x, y)) < min && red(temp.get(x, y)) > red(img.get(j, i))) {
                 min = red(temp.get(x, y)); 
               }
