@@ -1,5 +1,8 @@
 # Imageworks
 
+![GitHub](https://img.shields.io/github/license/lintopher0315/Imageworks)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/lintopher0315/Imageworks)
+
 ## About
 Imageworks is a collection of real-world digital image processing applications created from scratch. Every example is created in Processing, a language that serves as a graphical sketchbook. To learn more about Processing, click [here](https://processing.org/).
 
